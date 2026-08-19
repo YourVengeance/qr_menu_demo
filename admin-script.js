@@ -18,17 +18,73 @@ function initFirebase() {
         firebase.initializeApp(window.FIREBASE_CONFIG);
         db = firebase.database();
 
-        // Monitor connection state
-        db.ref('.info/connected').on('value', (snap) => {
-            isConnected = snap.val() === true;
-            updateConnectionStatus(isConnected);
+        // Listen to Auth State
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                // Logged in
+                document.getElementById('loginOverlay').classList.add('hidden');
+                
+                // Monitor connection state
+                db.ref('.info/connected').on('value', (snap) => {
+                    isConnected = snap.val() === true;
+                    updateConnectionStatus(isConnected);
+                });
+
+                initRequestsListener();
+                loadTables();
+            } else {
+                // Not logged in
+                document.getElementById('loginOverlay').classList.remove('hidden');
+                updateConnectionStatus(false, 'Not logged in');
+                
+                // Disconnect database listeners if they exist
+                db.ref('.info/connected').off();
+                db.ref('verifications').off();
+                db.ref('tables').off();
+            }
         });
 
-        initRequestsListener();
-        loadTables();
+        setupAuthUI();
+
     } catch (err) {
         console.error('Firebase init error:', err);
         showConfigError();
+    }
+}
+
+function setupAuthUI() {
+    const loginForm = document.getElementById('loginForm');
+    const loginBtn = document.getElementById('loginBtn');
+    const loginError = document.getElementById('loginError');
+    const logoutBtn = document.getElementById('logoutBtn');
+
+    // Login Form Submit
+    loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('adminEmail').value;
+        const password = document.getElementById('adminPassword').value;
+        
+        loginBtn.classList.add('loading');
+        loginError.classList.add('hidden');
+        loginBtn.disabled = true;
+
+        try {
+            await firebase.auth().signInWithEmailAndPassword(email, password);
+            // onAuthStateChanged will handle the UI update
+        } catch (error) {
+            loginError.textContent = error.message;
+            loginError.classList.remove('hidden');
+        } finally {
+            loginBtn.classList.remove('loading');
+            loginBtn.disabled = false;
+        }
+    });
+
+    // Logout Button
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', () => {
+            firebase.auth().signOut();
+        });
     }
 }
 
