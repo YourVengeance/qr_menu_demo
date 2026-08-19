@@ -311,16 +311,35 @@ async function loadTables() {
 }
 
 function renderQRCodes() {
-    const grid = document.getElementById('qrGrid');
-    const baseUrl = document.getElementById('baseUrlInput').value.trim().replace(/\/$/, '');
+    try {
+        const grid = document.getElementById('qrGrid');
+        const baseUrlInput = document.getElementById('baseUrlInput');
+        
+        if (!grid || !baseUrlInput) {
+            console.error('QR Grid or Base URL input missing from HTML!');
+            return;
+        }
 
-    grid.innerHTML = '';
+        const baseUrl = baseUrlInput.value.trim().replace(/\/$/, '');
+        grid.innerHTML = '';
 
-    Object.entries(tablesData).forEach(([tableId, tableInfo]) => {
-        const verifyUrl = `${baseUrl}/verify.html?table=${tableId}`;
-        const card = createQRCard(tableId, tableInfo.name, verifyUrl);
-        grid.appendChild(card);
-    });
+        if (!tablesData || typeof tablesData !== 'object') {
+            console.warn('tablesData is empty or not an object', tablesData);
+            grid.innerHTML = '<p style="color: #8990A5; grid-column: 1/-1; text-align: center;">No tables found in database.</p>';
+            return;
+        }
+
+        Object.entries(tablesData).forEach(([tableId, tableInfo]) => {
+            if (!tableInfo) return; // Skip null entries if it converted to an array
+            const tableName = tableInfo.name || tableId;
+            const verifyUrl = `${baseUrl}/verify.html?table=${tableId}`;
+            const card = createQRCard(tableId, tableName, verifyUrl);
+            grid.appendChild(card);
+        });
+    } catch (error) {
+        console.error('Error rendering QR codes:', error);
+        alert('There was a small error loading the QR codes. Please check the Developer Console (F12) for details.');
+    }
 }
 
 function createQRCard(tableId, tableName, url) {
