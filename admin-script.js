@@ -286,8 +286,26 @@ let tablesData = {};
 async function loadTables() {
     if (!db) return;
 
-    db.ref('tables').on('value', (snapshot) => {
-        tablesData = snapshot.val() || {};
+    db.ref('tables').on('value', async (snapshot) => {
+        tablesData = snapshot.val();
+        
+        // Fallback: If tables were somehow deleted or not initialized by the server, create them here
+        if (!tablesData) {
+            const defaultTables = {};
+            for (let i = 1; i <= 10; i++) {
+                defaultTables[`table_${i}`] = {
+                    name: `Table ${i}`,
+                    status: 'available'
+                };
+            }
+            try {
+                await db.ref('tables').set(defaultTables);
+            } catch (e) {
+                console.error("Could not create tables:", e);
+            }
+            return; // The 'on' listener will automatically fire again once set() completes
+        }
+
         renderQRCodes();
     });
 }
