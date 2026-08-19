@@ -143,6 +143,7 @@ document.querySelectorAll('.nav-item').forEach(btn => {
 
         // Show/hide top-bar buttons
         document.getElementById('clearExpiredBtn').classList.toggle('hidden', panel !== 'requests');
+        document.getElementById('clearVerifiedBtn').classList.toggle('hidden', panel !== 'requests');
         document.getElementById('printAllBtn').classList.toggle('hidden', panel !== 'qrcodes');
     });
 });
@@ -249,7 +250,7 @@ function updatePendingBadge(count) {
 }
 
 /* ============================================
-   CLEAR EXPIRED
+   CLEAR EXPIRED & VERIFIED
    ============================================ */
 document.getElementById('clearExpiredBtn').addEventListener('click', async () => {
     if (!db) return;
@@ -262,6 +263,19 @@ document.getElementById('clearExpiredBtn').addEventListener('click', async () =>
     }
     await db.ref('verifications').update(updates);
     showAdminToast('🗑 Cleared', `Removed ${Object.keys(updates).length} expired request(s)`);
+});
+
+document.getElementById('clearVerifiedBtn').addEventListener('click', async () => {
+    if (!db) return;
+    const snapshot = await db.ref('verifications').orderByChild('status').equalTo('verified').once('value');
+    const updates = {};
+    snapshot.forEach(child => { updates[child.key] = null; });
+    if (Object.keys(updates).length === 0) {
+        showAdminToast('ℹ️ Nothing to clear', 'No verified requests found');
+        return;
+    }
+    await db.ref('verifications').update(updates);
+    showAdminToast('🧹 Cleared', `Removed ${Object.keys(updates).length} verified request(s)`);
 });
 
 /* ============================================
