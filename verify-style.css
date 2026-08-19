@@ -1,0 +1,703 @@
+/* ============================================
+   VERIFY PAGE — Premium Styles
+   Matches the menu's warm, elegant aesthetic
+   ============================================ */
+
+:root {
+    --bg: #fcfcfb;
+    --bg-card: #fafafa;
+    --bg-warm: #EDE5DA;
+    --bg-input: #f5f3ee;
+    --ink: #1A1410;
+    --ink-soft: #7f6958;
+    --ink-muted: #574B3F;
+    --ink-faint: #9B8E82;
+    --ink-font: #050505;
+    --gold: #B8860B;
+    --gold-soft: rgba(184, 134, 11, 0.1);
+    --gold-glow: rgba(184, 134, 11, 0.06);
+    --green: #1E7A3E;
+    --red: #C0392B;
+    --border: #E6DDD2;
+    --font-serif: 'DM Serif Display', Georgia, serif;
+    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --radius: 16px;
+    --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    font-family: var(--font-sans);
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: linear-gradient(160deg, #1A1410 0%, #2D1F16 40%, #1A1410 100%);
+    color: var(--ink-font);
+    -webkit-font-smoothing: antialiased;
+    padding: 0;
+    margin: 0 auto;
+    max-width: 480px;
+    overflow-x: hidden;
+}
+
+::selection {
+    background: var(--gold);
+    color: #fff;
+}
+
+/* ============================================
+   HEADER
+   ============================================ */
+.verify-header {
+    width: 100%;
+    text-align: center;
+    padding: 48px 24px 20px;
+    animation: fadeDown 0.6s var(--ease) both;
+}
+
+@keyframes fadeDown {
+    from {
+        opacity: 0;
+        transform: translateY(-12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.verify-logo {
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.verify-restaurant-name {
+    font-family: var(--font-serif);
+    font-size: 1.6rem;
+    color: #F4EDE4;
+    margin-bottom: 8px;
+    line-height: 1.2;
+}
+
+.verify-tagline {
+    font-size: 0.68rem;
+    color: var(--gold);
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    font-weight: 500;
+}
+
+/* ============================================
+   TABLE INDICATOR
+   ============================================ */
+.table-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(184, 134, 11, 0.12);
+    border: 1px solid rgba(184, 134, 11, 0.25);
+    padding: 8px 22px;
+    border-radius: 100px;
+    margin: 12px 0 4px;
+    color: var(--gold);
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    animation: fadeDown 0.6s var(--ease) 0.1s both;
+}
+
+.table-icon {
+    font-size: 1rem;
+}
+
+/* ============================================
+   STEP INDICATOR
+   ============================================ */
+.step-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    padding: 20px 24px;
+    width: 100%;
+    max-width: 320px;
+    animation: fadeDown 0.6s var(--ease) 0.15s both;
+}
+
+.step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    opacity: 0.35;
+    transition: opacity 0.5s var(--ease);
+}
+
+.step.active {
+    opacity: 1;
+}
+
+.step.completed {
+    opacity: 0.7;
+}
+
+.step-number {
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.78rem;
+    font-weight: 700;
+    border: 2px solid rgba(255, 255, 255, 0.12);
+    transition: all 0.5s var(--ease);
+}
+
+.step.active .step-number {
+    background: var(--gold);
+    color: #fff;
+    border-color: var(--gold);
+    box-shadow: 0 2px 12px rgba(184, 134, 11, 0.4);
+}
+
+.step.completed .step-number {
+    background: var(--green);
+    border-color: var(--green);
+    color: #fff;
+    box-shadow: 0 2px 12px rgba(30, 122, 62, 0.3);
+}
+
+.step-label {
+    font-size: 0.62rem;
+    color: rgba(255, 255, 255, 0.4);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.step.active .step-label {
+    color: rgba(255, 255, 255, 0.75);
+}
+
+.step-line {
+    width: 64px;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 1px;
+    margin: 0 12px;
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+.step-line::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 0;
+    background: var(--gold);
+    transition: width 0.7s var(--ease);
+    border-radius: 1px;
+}
+
+.step-line.filled::after {
+    width: 100%;
+}
+
+/* ============================================
+   VERIFY CARD
+   ============================================ */
+.verify-card {
+    width: calc(100% - 32px);
+    max-width: 400px;
+    background: var(--bg-card);
+    border-radius: 24px;
+    padding: 36px 28px;
+    margin: 8px 16px 32px;
+    box-shadow: 0 8px 48px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.04);
+    animation: slideUp 0.55s var(--ease) both;
+}
+
+.verify-card.hidden {
+    display: none;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(28px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.verify-card h2 {
+    font-family: var(--font-serif);
+    font-size: 1.4rem;
+    color: var(--ink-font);
+    margin-bottom: 8px;
+    text-align: center;
+    font-weight: 400;
+}
+
+.card-subtitle {
+    font-size: 0.82rem;
+    color: var(--ink-muted);
+    text-align: center;
+    margin-bottom: 28px;
+    line-height: 1.6;
+}
+
+/* ============================================
+   FORM INPUTS
+   ============================================ */
+.input-group {
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    display: block;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--ink-muted);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+}
+
+.input-group>input {
+    width: 100%;
+    padding: 15px 18px;
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    color: var(--ink-font);
+    background: var(--bg-input);
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
+    outline: none;
+    transition: all 0.3s var(--ease);
+    letter-spacing: 0.2px;
+}
+
+.input-group>input:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px var(--gold-glow);
+    background: #fff;
+}
+
+.input-group>input::placeholder {
+    color: var(--ink-faint);
+}
+
+.phone-input-wrapper {
+    display: flex;
+    align-items: center;
+    background: var(--bg-input);
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    transition: all 0.3s var(--ease);
+}
+
+.phone-input-wrapper:focus-within {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px var(--gold-glow);
+    background: #fff;
+}
+
+.phone-prefix {
+    padding: 15px 14px 15px 18px;
+    font-size: 0.95rem;
+    color: var(--ink-soft);
+    font-weight: 600;
+    border-right: 1px solid var(--border);
+    background: rgba(0, 0, 0, 0.02);
+    user-select: none;
+    letter-spacing: 0.3px;
+}
+
+.phone-input-wrapper input {
+    border: none;
+    background: transparent;
+    padding: 15px 18px;
+    flex: 1;
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    color: var(--ink-font);
+    outline: none;
+    letter-spacing: 1px;
+}
+
+.phone-input-wrapper input::placeholder {
+    color: var(--ink-faint);
+    letter-spacing: 0.5px;
+}
+
+/* ============================================
+   VERIFY BUTTON
+   ============================================ */
+.verify-btn {
+    width: 100%;
+    padding: 17px;
+    background: var(--gold);
+    color: #fff;
+    border: none;
+    border-radius: 14px;
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    transition: all 0.3s var(--ease);
+    margin-top: 8px;
+    position: relative;
+    overflow: hidden;
+}
+
+.verify-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.verify-btn:hover::before {
+    opacity: 1;
+}
+
+.verify-btn:hover {
+    background: #A07608;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(184, 134, 11, 0.3);
+}
+
+.verify-btn:active {
+    transform: scale(0.98);
+    box-shadow: none;
+}
+
+.verify-btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.verify-btn:disabled:hover::before {
+    opacity: 0;
+}
+
+.btn-loader {
+    display: none;
+    width: 20px;
+    height: 20px;
+    border: 2.5px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+}
+
+.verify-btn.loading .btn-text,
+.verify-btn.loading .btn-icon {
+    opacity: 0;
+}
+
+.verify-btn.loading .btn-loader {
+    display: block;
+}
+
+.verify-btn.loading {
+    pointer-events: none;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ============================================
+   OTP INPUT
+   ============================================ */
+.otp-container {
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+    margin: 28px 0 20px;
+}
+
+.otp-digit {
+    width: 60px;
+    height: 68px;
+    text-align: center;
+    font-family: var(--font-serif);
+    font-size: 1.7rem;
+    color: var(--ink-font);
+    background: var(--bg-input);
+    border: 2px solid var(--border);
+    border-radius: 16px;
+    outline: none;
+    transition: all 0.3s var(--ease);
+    caret-color: var(--gold);
+}
+
+.otp-digit:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(184, 134, 11, 0.1);
+    background: #fff;
+    transform: translateY(-2px);
+}
+
+.otp-digit.filled {
+    border-color: var(--gold);
+    background: var(--gold-soft);
+}
+
+.otp-digit.error {
+    border-color: var(--red);
+    background: rgba(192, 57, 43, 0.04);
+    animation: shake 0.45s var(--ease);
+}
+
+@keyframes shake {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    20% {
+        transform: translateX(-6px);
+    }
+
+    40% {
+        transform: translateX(5px);
+    }
+
+    60% {
+        transform: translateX(-4px);
+    }
+
+    80% {
+        transform: translateX(3px);
+    }
+}
+
+/* ============================================
+   OTP TIMER
+   ============================================ */
+.otp-timer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-size: 0.78rem;
+    color: var(--ink-faint);
+    margin-bottom: 20px;
+}
+
+.otp-timer svg {
+    opacity: 0.6;
+}
+
+.otp-timer.expiring {
+    color: var(--red);
+}
+
+.otp-timer.expiring svg {
+    opacity: 1;
+}
+
+.otp-timer.expired {
+    color: var(--red);
+    font-weight: 600;
+}
+
+/* ============================================
+   OTP ERROR
+   ============================================ */
+.otp-error {
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--red);
+    margin-bottom: 14px;
+    padding: 10px 14px;
+    background: rgba(192, 57, 43, 0.06);
+    border: 1px solid rgba(192, 57, 43, 0.12);
+    border-radius: 10px;
+    font-weight: 500;
+}
+
+.otp-error.hidden {
+    display: none;
+}
+
+/* ============================================
+   RESEND LINK
+   ============================================ */
+.resend-link {
+    display: block;
+    width: 100%;
+    text-align: center;
+    margin-top: 18px;
+    font-size: 0.78rem;
+    color: var(--ink-faint);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    transition: color 0.3s;
+    font-family: var(--font-sans);
+    letter-spacing: 0.2px;
+}
+
+.resend-link:hover {
+    color: var(--gold);
+}
+
+/* ============================================
+   SUCCESS ANIMATION
+   ============================================ */
+.success-animation {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.success-checkmark {
+    width: 80px;
+    height: 80px;
+}
+
+.success-circle {
+    stroke: var(--green);
+    stroke-width: 2;
+    stroke-dasharray: 166;
+    stroke-dashoffset: 166;
+    animation: circleStroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+}
+
+.success-check {
+    stroke: var(--green);
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 48;
+    stroke-dashoffset: 48;
+    animation: checkStroke 0.35s cubic-bezier(0.65, 0, 0.45, 1) 0.45s forwards;
+}
+
+@keyframes circleStroke {
+    100% {
+        stroke-dashoffset: 0;
+    }
+}
+
+@keyframes checkStroke {
+    100% {
+        stroke-dashoffset: 0;
+    }
+}
+
+/* ============================================
+   ERROR / NO TABLE CARD
+   ============================================ */
+.error-icon {
+    font-size: 3.5rem;
+    text-align: center;
+    margin-bottom: 16px;
+}
+
+/* ============================================
+   TOAST NOTIFICATION
+   ============================================ */
+.toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(120px);
+    background: var(--ink-font);
+    color: #fff;
+    padding: 14px 22px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.82rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+    z-index: 1000;
+    transition: transform 0.45s var(--ease);
+    max-width: 90%;
+    pointer-events: none;
+    font-weight: 500;
+}
+
+.toast.visible {
+    transform: translateX(-50%) translateY(0);
+    pointer-events: auto;
+}
+
+.toast-icon {
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+
+/* ============================================
+   DESKTOP — Card feel
+   ============================================ */
+@media (min-width: 521px) {
+    body {
+        padding-top: 20px;
+        justify-content: flex-start;
+    }
+}
+
+/* Small screen adjustments */
+@media (max-width: 360px) {
+    .otp-digit {
+        width: 52px;
+        height: 60px;
+        font-size: 1.5rem;
+    }
+
+    .otp-container {
+        gap: 10px;
+    }
+
+    .verify-card {
+        padding: 28px 20px;
+    }
+}

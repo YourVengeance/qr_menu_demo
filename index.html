@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>The Garden Bistro — Digital Menu</title>
+    <meta name="description" content="Browse our delicious menu. Scan the QR code to view our full menu on your phone.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="menu-style.css">
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="menu-header" id="menuHeader">
+        <div class="header-content">
+            <div class="restaurant-logo" id="restaurantLogo">
+                <img src="images/empire.png" alt="Logo" class="logo-icon" width="36" height="36">
+                <div>
+                    <h1 class="restaurant-name">The Garden Bistro</h1>
+                    <p class="restaurant-tagline">Fresh • Flavorful • Made with Love</p>
+                </div>
+            </div>
+            <div class="header-meta">
+                <span class="header-badge table-badge" id="tableBadge" style="display:none">
+                    🪑 <span id="tableLabel">Table 1</span>
+                </span>
+                <span class="header-badge open-badge" id="openBadge">
+                    <span class="open-dot"></span>
+                    Open Now
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Search Bar -->
+    <div class="search-bar-wrapper" id="searchWrapper">
+        <div class="search-bar">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+            <input type="text" id="searchInput" placeholder="Search menu items..." autocomplete="off">
+            <button class="search-clear" id="searchClear" aria-label="Clear search">✕</button>
+        </div>
+    </div>
+
+    <!-- Category Tabs -->
+    <nav class="category-nav" id="categoryNav">
+        <div class="category-tabs">
+            <button class="cat-tab active" data-category="all" id="tabAll">
+                <span class="cat-emoji">🍽️</span>
+                <span>All</span>
+            </button>
+            <button class="cat-tab" data-category="starters" id="tabStarters">
+                <span class="cat-emoji">🥗</span>
+                <span>Starters</span>
+            </button>
+            <button class="cat-tab" data-category="mains" id="tabMains">
+                <span class="cat-emoji">🍛</span>
+                <span>Mains</span>
+            </button>
+            <button class="cat-tab" data-category="pizza" id="tabPizza">
+                <span class="cat-emoji">🍕</span>
+                <span>Pizza</span>
+            </button>
+            <button class="cat-tab" data-category="burgers" id="tabBurgers">
+                <span class="cat-emoji">🍔</span>
+                <span>Burgers</span>
+            </button>
+            <button class="cat-tab" data-category="desserts" id="tabDesserts">
+                <span class="cat-emoji">🍰</span>
+                <span>Desserts</span>
+            </button>
+            <button class="cat-tab" data-category="drinks" id="tabDrinks">
+                <span class="cat-emoji">🥤</span>
+                <span>Drinks</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Menu Content -->
+    <main class="menu-content" id="menuContent">
+
+        <!-- Starters -->
+        <section class="menu-section" data-section="starters" id="sectionStarters">
+            <div class="section-label">
+                <h2>🥗 Starters</h2>
+                <span class="item-count">4 items</span>
+            </div>
+            <div class="menu-items">
+                <div class="menu-item" data-name="Classic Bruschetta" data-price="199" data-type="veg">
+                    <div class="item-details">
+                        <div class="item-header">
+                            <h3 class="item-name"><span class="food-symbol veg-symbol"></span>Classic Bruschetta</h3>
+                        </div>
+                        <p class="item-desc">Toasted bread topped with fresh tomatoes, basil, garlic & olive oil drizzle
+                        </p>
+                        <div class="item-footer">
+                            <span class="item-price">₹199</span>
+                            <div class="qty-control">
+                                <button class="qty-btn qty-minus" aria-label="Decrease">−</button>
+                                <span class="qty-value">0</span>
+                                <button class="qty-btn qty-plus" aria-label="Increase">+</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="menu-item" data-name="Honey BBQ Wings" data-price="299" data-type="nonveg">
+                    <div class="item-details">
+                        <div class="item-header">
+                            <h3 class="item-name"><span class="food-symbol nonveg-symbol"></span>Honey BBQ Wings</h3>
+                        </div>
+                        <p class="item-desc">Crispy chicken wings glazed with smoky honey BBQ sauce, served with ranch
+                            dip</p>
+                        <div class="item-footer">
+                            <span class="item-price">₹299</span>
+                            <div class="qty-control">
+                                <button class="qty-btn qty-minus" aria-label="Decrease">−</button>
+                                <span class="qty-value">0</span>
+                                <button class="qty-btn qty-plus" aria-label="Increase">+</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="menu-item" data-name="Creamy Tomato Soup" data-price="149" data-type="veg">
+                    <div class="item-details">
+                        <div class="item-header">
+                            <h3 class="item-name"><span class="food-symbol veg-symbol"></span>Creamy Tomato Soup</h3>
+                        </div>
+                        <p class="item-desc">Rich and velvety tomato soup with a hint of basil, served with garlic
+                            croutons</p>
+                        <div class="item-footer">
+                            <span class="item-price">₹149</span>
+                            <div class="qty-control">
+                                <button class="qty-btn qty-minus" aria-label="Decrease">−</button>
+                                <span class="qty-value">0</span>
+                                <button class="qty-btn qty-plus" aria-label="Increase">+</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="menu-item" data-name="Egg Spring Rolls" data-price="179" data-type="egg">
+                    <div class="item-details">
+                        <div class="item-header">
+                            <h3 class="item-name"><span class="food-symbol egg-symbol"></span>Egg Spring Rolls</h3>
+                        </div>
+                        <p class="item-desc">Golden fried rolls stuffed with egg & vegetables, served with sweet chilli
+                            sauce</p>
+                        <div class="item-footer">
+                            <span class="item-price">₹179</span>
+                            <div class="qty-control">
+                                <button class="qty-btn qty-minus" aria-label="Decrease">−</button>
+                                <span class="qty-value">0</span>
+                                <button class="qty-btn qty-plus" aria-label="Increase">+</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Mains -->
+        <section class="menu-section" data-section="mains" id="sectionMains">
+            <div class="section-label">
+                <h2>🍛 Mains</h2>
+                <span class="item-count">4 items</span>
+            </div>
+            <div class="menu-items">
+                <div class="menu-item" data-name="Butter Chicken" data-price="349" data-type="nonveg">
+                    <div class="item-details">
+                        <div class="item-header">
+                            <h3 class="item-name"><span class="food-symbol nonveg-symbol"></span>Butter Chicken</h3>
+                        </div>
+                        <p class="item-desc">Tender chicken in rich, creamy tomato-butter gravy with aromatic spices</p>
+                        <div class="item-footer">
+                            <span class="item-price">₹349</span>
+                            <div class="qty-control">
+                                <button class="qty-btn qty-minus" aria-label="Decrease">−</button>
+                                <span class="qty-value">0</span>
+                                <button class="qty-btn qty-plus" aria-label="Increase">+</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="menu-item" data-name="Paneer Tikka Masala" data-price="299" data-type="veg">
+                    <div class="item-details">
+                        <div class="item-header">
+                            <h3 class="item-name"><span class="food-symbol veg-symbol"></span>Paneer Tikka Masala</h3>
+                        </div>
+                        <p class="item-desc">Grilled paneer cubes in a spiced onion-tomato gravy with bell peppers</p>
+                        <div class="item-footer">
+                            <span class="item-price">₹299</span>
+                            <div class="qty-control">
+                                <button class="qty-btn qty-minus" aria-label="Decrease">−</button>
+                                <span class="qty-value">0</span>
+                                <button class="qty-btn qty-plus" aria-label="Increase">+</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="menu-item" data-name="Grilled Salmon" data-price="599" data-type="nonveg">
+                    <div class="item-details">
+                        <div class="item-header">
+                            <h3 class="item-name"><span class="food-symbol nonveg-symbol"></span>Grilled Salmon</h3>
+                        </div>
+                        <p class="item-desc">Fresh Atlantic salmon fillet, herb-crusted and grilled, with lemon butter
+                            sauce</p>
+                        <div class="item-footer">
+                            <span class="item-price">₹599</span>
+                            <div class="qty-control">
+                                <button class="qty-btn qty-minus" aria-label="Decrease">−</button>
+                                <span class="qty-value">0</span>
+                                <button class="qty-btn qty-plus" aria-label="Increase">+</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="menu-item" data-name="Mushroom Risotto" data-price="379" data-type="veg">
+                    <div class="item-details">
+                        <div class="item-header">
+                            <h3 class="item-name"><span class="food-symbol veg-symbol"></span>Mushroom Risotto</h3>
+                        </div>
+                        <p class="item-desc">Creamy Arborio rice with sautéed wild mushrooms, parmesan & truffle oil</p>
+                        <div class="item-footer">
+                            <span class="item-price">₹379</span>
+                            <div class="qty-control">
+                                <button class="qty-btn qty-minus" aria-label="Decrease">−</button>
+                                <span class="qty-value">0</span>
+                                <button class="qty-btn qty-plus" aria-label="Increase">+</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pizza -->
+        <section class="menu-section" data-section="pizza" id="sectionPizza">
+            <div class="section-label">
+                <h2>🍕 Pizza</h2>
+                <span class="item-count">3 items</span>
+            </div>
+            <div class="menu-items">
+                <div class="menu-item" data-name="Classic Margherita" data-price="299" data-type="veg">
+                    <div class="item-details">
+                        <div class="item-header">
+                            <h3 class="item-name"><span class="food-symbol veg-symbol"></span>Classic Margherita</h3>
+                        </div>
+                        <p class="item-desc">Fresh mozzarella, San Marzano tomato sauce, basil on a thin crispy crust
+                        </p>
+                        <div class="item-footer">
+                            <span class="item-price">₹299</span>
+                            <div class="qty-control">
+                                <button class="qty-btn qty-minus" aria-label="Decrease">−</button>
+                                <span class="qty-value">0</span>
+                                <button class="qty-btn qty-plus" aria-label="Increase">+</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="menu-item" data-name="Spicy Pepperoni" data-price="399" data-type="nonveg">
+                    <div class="item-details">
+                        <div class="item-header">
+                            <h3 class="item-name"><span class="food-symbol nonveg-symbol"></span>Spicy Pepperoni</h3>
+                        </div>
+                        <p class="item-desc">Loaded with pepperoni slices, mozzarella, jalapeños & a spicy marinara base
+                        </p>
+                        <div class="item-footer">
+                            <span class="item-price">₹399</span>
+                            <div class="qty-control">
+                                <button class="qty-btn qty-minus" aria-label="Decrease">−</button>
+                                <span class="qty-value">0</span>
+                                <button class="qty-btn qty-plus" aria-label="Increase">+</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="menu-item" data-name="Garden Farmhouse" data-price="349" data-type="veg">
+                    <div class="item-details">
+                        <div class="item-header">
+                            <h3 class="item-name"><span class="food-symbol veg-symbol"></span>Garden Farmhouse</h3>
+                        </div>
+                        <p class="item-desc">Bell peppers, onions, olives, mushrooms, corn & cheese on herbed crust</p>
+                        <div class="item-footer">
+                            <span class="item-price">₹349</span>
+                            <div class="qty-control">
+                                <button class="qty-btn qty-minus" aria-label="Decrease">−</button>
+                                <span class="qty-value">0</span>
+                                <button class="qty-btn qty-plus" aria-label="Increase">+</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Burgers -->
+        <section class="menu-section" data-section="burgers" id="sectionBurgers">
+            <div class="section-label">
+                <h2>🍔 Burgers</h2>
+                <span class="item-count">3 items</span>
+            </div>
+            <div class="menu-items">
+                <div class="menu-item" data-name="Classic Smash Burger" data-price="349" data-type="nonveg">
+                    <div class="item-details">
+                        <div class="item-header">
+                            <h3 class="item-name"><span class="food-symbol nonveg-symbol"></span>Classic Smash Burger
+                            </h3>
+                        </div>
+                        <p class="item-desc">Double smashed beef patties, cheddar, caramelized onions, pickles & secret
+                            sauce</p>
+                        <div class="item-footer">
+                            <span class="item-price">₹349</span>
+                            <div class="qty-control">
+                                <button class="qty-btn qty-minus" aria-label="Decrease">−</button>
+                                <span class="qty-value">0</span>
+                                <button class="qty-btn qty-plus" aria-label="Increase">+</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="menu-item" data-name="Crispy Paneer Burger" data-price="249" data-type="veg">
+                    <div class="item-details">
+                        <div class="item-header">
+                            <h3 class="item-name"><span class="food-symbol veg-symbol"></span>Crispy Paneer Burger</h3>
+                        </div>
+                        <p class="item-desc">Crispy fried paneer patty, lettuce, tomato, mint mayo in a toasted bun</p>
+                        <div class="item-footer">
+                            <span class="item-price">₹249</span>
+                            <div class="qty-control">
+                                <button class="qty-btn qty-minus" aria-label="Decrease">−</button>
+                                <span class="qty-value">0</span>
+                                <button class="qty-btn qty-plus" aria-label="Increase">+</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="menu-item" data-name="Spicy Chicken Zinger" data-price="299" data-type="nonveg">
+                    <div class="item-details">
+                        <div class="item-header">
+                            <h3 class="item-name"><span class="food-symbol nonveg-symbol"></span>Spicy Chicken Zinger
+                            </h3>
+                        </div>
+                        <p class="item-desc">Crispy fried chicken fillet, spicy sriracha mayo, coleslaw & jalapeños</p>
+                        <div class="item-footer">
+                            <span class="item-price">₹299</span>
+                            <div class="qty-control">
+                                <button class="qty-btn qty-minus" aria-label="Decrease">−</button>
+                                <span class="qty-value">0</span>
+                                <button class="qty-btn qty-plus" aria-label="Increase">+</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Desserts -->
+        <section class="menu-section" data-section="desserts" id="sectionDesserts">
+            <div class="section-label">
+                <h2>🍰 Desserts</h2>
+                <span class="item-count">3 items</span>
+            </div>
+            <div class="menu-items">
+                <div class="menu-item" data-name="Chocolate Lava Cake" data-price="249" data-type="egg">
+                    <div class="item-details">
+                        <div class="item-header">
+                            <h3 class="item-name"><span class="food-symbol egg-symbol"></span>Chocolate Lava Cake</h3>
+                        </div>
+                        <p class="item-desc">Warm molten chocolate cake with vanilla ice cream & chocolate drizzle</p>
+                        <div class="item-footer">
+                            <span class="item-price">₹249</span>
+                            <div class="qty-control">
+                                <button class="qty-btn qty-minus" aria-label="Decrease">−</button>
+                                <span class="qty-value">0</span>
+                                <button class="qty-btn qty-plus" aria-label="Increase">+</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="menu-item" data-name="Classic Tiramisu" data-price="279" data-type="egg">
+                    <div class="item-details">
+                        <div class="item-header">
+                            <h3 class="item-name"><span class="food-symbol egg-symbol"></span>Classic Tiramisu</h3>
+                        </div>
+                        <p class="item-desc">Layers of espresso-soaked ladyfingers, mascarpone cream & cocoa dust</p>
+                        <div class="item-footer">
+                            <span class="item-price">₹279</span>
+                            <div class="qty-control">
+                                <button class="qty-btn qty-minus" aria-label="Decrease">−</button>
+                                <span class="qty-value">0</span>
+                                <button class="qty-btn qty-plus" aria-label="Increase">+</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="menu-item" data-name="Gulab Jamun" data-price="149" data-type="veg">
+                    <div class="item-details">
+                        <div class="item-header">
+                            <h3 class="item-name"><span class="food-symbol veg-symbol"></span>Gulab Jamun</h3>
+                        </div>
+                        <p class="item-desc">Soft golden dumplings soaked in warm rose-cardamom sugar syrup</p>
+                        <div class="item-footer">
+                            <span class="item-price">₹149</span>
+                            <div class="qty-control">
+                                <button class="qty-btn qty-minus" aria-label="Decrease">−</button>
+                                <span class="qty-value">0</span>
+                                <button class="qty-btn qty-plus" aria-label="Increase">+</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Drinks -->
+        <section class="menu-section" data-section="drinks" id="sectionDrinks">
+            <div class="section-label">
+                <h2>🥤 Drinks</h2>
+                <span class="item-count">4 items</span>
+            </div>
+            <div class="menu-items">
+                <div class="menu-item" data-name="Mango Lassi" data-price="149" data-type="veg">
+                    <div class="item-details">
+                        <div class="item-header">
+                            <h3 class="item-name"><span class="food-symbol veg-symbol"></span>Mango Lassi</h3>
+                        </div>
+                        <p class="item-desc">Thick & creamy yogurt smoothie blended with fresh Alphonso mango</p>
+                        <div class="item-footer">
+                            <span class="item-price">₹149</span>
+                            <div class="qty-control">
+                                <button class="qty-btn qty-minus" aria-label="Decrease">−</button>
+                                <span class="qty-value">0</span>
+                                <button class="qty-btn qty-plus" aria-label="Increase">+</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="menu-item" data-name="Iced Caramel Latte" data-price="179" data-type="veg">
+                    <div class="item-details">
+                        <div class="item-header">
+                            <h3 class="item-name"><span class="food-symbol veg-symbol"></span>Iced Caramel Latte</h3>
+                        </div>
+                        <p class="item-desc">Espresso over ice with creamy milk and a sweet caramel swirl</p>
+                        <div class="item-footer">
+                            <span class="item-price">₹179</span>
+                            <div class="qty-control">
+                                <button class="qty-btn qty-minus" aria-label="Decrease">−</button>
+                                <span class="qty-value">0</span>
+                                <button class="qty-btn qty-plus" aria-label="Increase">+</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="menu-item" data-name="Fresh Lime Soda" data-price="99" data-type="veg">
+                    <div class="item-details">
+                        <div class="item-header">
+                            <h3 class="item-name"><span class="food-symbol veg-symbol"></span>Fresh Lime Soda</h3>
+                        </div>
+                        <p class="item-desc">Freshly squeezed lime with soda, mint leaves & a pinch of black salt</p>
+                        <div class="item-footer">
+                            <span class="item-price">₹99</span>
+                            <div class="qty-control">
+                                <button class="qty-btn qty-minus" aria-label="Decrease">−</button>
+                                <span class="qty-value">0</span>
+                                <button class="qty-btn qty-plus" aria-label="Increase">+</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="menu-item" data-name="Virgin Mojito" data-price="129" data-type="veg">
+                    <div class="item-details">
+                        <div class="item-header">
+                            <h3 class="item-name"><span class="food-symbol veg-symbol"></span>Virgin Mojito</h3>
+                        </div>
+                        <p class="item-desc">Refreshing blend of lime, mint, sugar & sparkling soda over crushed ice</p>
+                        <div class="item-footer">
+                            <span class="item-price">₹129</span>
+                            <div class="qty-control">
+                                <button class="qty-btn qty-minus" aria-label="Decrease">−</button>
+                                <span class="qty-value">0</span>
+                                <button class="qty-btn qty-plus" aria-label="Increase">+</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- No results message -->
+        <div class="no-results" id="noResults">
+            <span class="no-results-icon">🔍</span>
+            <h3>No items found</h3>
+            <p>Try a different search term</p>
+        </div>
+
+    </main>
+
+    <!-- Cart Drawer -->
+    <div class="cart-overlay" id="cartOverlay"></div>
+    <div class="cart-drawer" id="cartDrawer">
+        <div class="cart-header">
+            <h2>🛒 Your Cart</h2>
+            <button class="cart-close" id="cartClose" aria-label="Close cart">✕</button>
+        </div>
+        <div class="cart-items" id="cartItems">
+            <!-- Filled by JS -->
+        </div>
+        <div class="cart-empty" id="cartEmpty">
+            <span>🛒</span>
+            <p>Your cart is empty</p>
+        </div>
+        <div class="cart-footer" id="cartFooter">
+            <div class="cart-total-row">
+                <span>Total</span>
+                <span class="cart-total-price" id="cartTotalPrice">₹0</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Cart Bar -->
+    <div class="floating-cart" id="floatingCart">
+        <div class="floating-cart-info">
+            <span class="floating-cart-count" id="floatingCount">0 items</span>
+            <span class="floating-cart-total" id="floatingTotal">₹0</span>
+        </div>
+        <button class="floating-cart-btn" id="floatingCartBtn">
+            View Cart 🛒
+        </button>
+    </div>
+
+    <!-- Footer -->
+    <footer class="menu-footer" id="menuFooter">
+        <div class="footer-info">
+            <p class="footer-name">The Garden Bistro</p>
+            <p class="footer-detail">📍 123 Main Street, Your City</p>
+            <p class="footer-detail">📞 +91 98765 43210</p>
+            <p class="footer-detail">🕐 11:00 AM – 11:00 PM</p>
+        </div>
+        <p class="footer-note">Prices inclusive of all taxes. Menu items subject to availability.</p>
+    </footer>
+
+    <!-- Session verification overlay -->
+    <div id="sessionOverlay" style="
+        position:fixed;inset:0;background:#fcfcfb;z-index:9999;
+        display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;
+    ">
+        <div style="
+            width:36px;height:36px;border:3px solid #E6DDD2;
+            border-top-color:#B8860B;border-radius:50%;
+            animation:spin 0.7s linear infinite;
+        "></div>
+        <p style="font-family:'Inter',sans-serif;font-size:0.8rem;color:#9B8E82;letter-spacing:0.3px;">Verifying session...</p>
+        <style>@keyframes spin{to{transform:rotate(360deg)}}</style>
+    </div>
+
+    <script src="menu-script.js"></script>
+</body>
+
+</html>

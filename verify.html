@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Verify Your Table — The Garden Bistro</title>
+    <meta name="description" content="Enter your details and verify your table to access the digital menu.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="verify-style.css">
+</head>
+
+<body>
+    <!-- Header with restaurant branding -->
+    <header class="verify-header" id="verifyHeader">
+        <img src="images/empire.png" alt="The Garden Bistro" class="verify-logo" width="56" height="56">
+        <h1 class="verify-restaurant-name">The Garden Bistro</h1>
+        <p class="verify-tagline">Fresh • Flavorful • Made with Love</p>
+    </header>
+
+    <!-- Table indicator -->
+    <div class="table-indicator" id="tableIndicator">
+        <span class="table-icon">🪑</span>
+        <span class="table-name" id="tableName">Table 1</span>
+    </div>
+
+    <!-- Step indicator -->
+    <div class="step-indicator" id="stepIndicator">
+        <div class="step active" id="step1Dot">
+            <span class="step-number">1</span>
+            <span class="step-label">Your Details</span>
+        </div>
+        <div class="step-line" id="stepLine"></div>
+        <div class="step" id="step2Dot">
+            <span class="step-number">2</span>
+            <span class="step-label">Verify OTP</span>
+        </div>
+    </div>
+
+    <!-- Step 1: Name & Phone -->
+    <div class="verify-card" id="step1Card">
+        <h2>Welcome! 👋</h2>
+        <p class="card-subtitle">Please enter your details to get started</p>
+        <form id="detailsForm" autocomplete="off">
+            <div class="input-group">
+                <label for="customerName">Your Name</label>
+                <input type="text" id="customerName" placeholder="Enter your full name" required autocomplete="name">
+            </div>
+            <div class="input-group">
+                <label for="customerPhone">Phone Number</label>
+                <div class="phone-input-wrapper">
+                    <span class="phone-prefix">+91</span>
+                    <input type="tel" id="customerPhone" placeholder="98765 43210" required maxlength="10"
+                        inputmode="numeric" autocomplete="tel">
+                </div>
+            </div>
+            <button type="submit" class="verify-btn" id="submitDetailsBtn">
+                <span class="btn-text">Get OTP</span>
+                <svg class="btn-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2">
+                    <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
+                <div class="btn-loader"></div>
+            </button>
+        </form>
+    </div>
+
+    <!-- Step 2: OTP Entry -->
+    <div class="verify-card hidden" id="step2Card">
+        <h2>Enter OTP 🔐</h2>
+        <p class="card-subtitle">Ask the restaurant staff for your 4-digit verification code</p>
+        <div class="otp-container" id="otpContainer">
+            <input type="text" class="otp-digit" maxlength="1" inputmode="numeric" data-index="0"
+                autocomplete="one-time-code" aria-label="OTP digit 1">
+            <input type="text" class="otp-digit" maxlength="1" inputmode="numeric" data-index="1"
+                aria-label="OTP digit 2">
+            <input type="text" class="otp-digit" maxlength="1" inputmode="numeric" data-index="2"
+                aria-label="OTP digit 3">
+            <input type="text" class="otp-digit" maxlength="1" inputmode="numeric" data-index="3"
+                aria-label="OTP digit 4">
+        </div>
+        <div class="otp-timer" id="otpTimer">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10" />
+                <path d="M12 6v6l4 2" />
+            </svg>
+            <span id="timerText">Expires in 10:00</span>
+        </div>
+        <div class="otp-error hidden" id="otpError">Invalid OTP. Please try again.</div>
+        <button class="verify-btn" id="verifyOtpBtn" disabled>
+            <span class="btn-text">Verify & Open Menu</span>
+            <svg class="btn-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2">
+                <path d="M20 6L9 17l-5-5" />
+            </svg>
+            <div class="btn-loader"></div>
+        </button>
+        <button class="resend-link" id="resendBtn">Didn't receive? Request new OTP</button>
+    </div>
+
+    <!-- Success State -->
+    <div class="verify-card hidden" id="successCard">
+        <div class="success-animation">
+            <svg class="success-checkmark" viewBox="0 0 52 52">
+                <circle class="success-circle" cx="26" cy="26" r="25" fill="none" />
+                <path class="success-check" d="M14.1 27.2l7.1 7.2 16.7-16.8" fill="none" />
+            </svg>
+        </div>
+        <h2>Verified! ✨</h2>
+        <p class="card-subtitle" id="successMessage">Welcome! Redirecting to menu...</p>
+    </div>
+
+    <!-- Error: No Table -->
+    <div class="verify-card hidden" id="noTableCard">
+        <div class="error-icon">📱</div>
+        <h2>Scan QR Code</h2>
+        <p class="card-subtitle">Please scan the QR code at your table to access the menu. Each table has a unique QR
+            code for secure ordering.</p>
+    </div>
+
+    <!-- Toast notification -->
+    <div class="toast" id="errorToast">
+        <span class="toast-icon">⚠️</span>
+        <span class="toast-message" id="toastMessage">Something went wrong</span>
+    </div>
+
+    <script src="verify-script.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Dashboard — The Garden Bistro</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <!-- QR Code library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <!-- Firebase client SDK (compat version for easy use) -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+    <link rel="stylesheet" href="admin-style.css">
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <img src="images/empire.png" alt="Logo" class="sidebar-logo" width="36" height="36">
+            <div>
+                <h1 class="sidebar-title">Garden Bistro</h1>
+                <p class="sidebar-subtitle">Restaurant Dashboard</p>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <button class="nav-item active" data-panel="requests" id="navRequests">
+                <span class="nav-icon">🔔</span>
+                <span>Requests</span>
+                <span class="nav-badge hidden" id="pendingBadge">0</span>
+            </button>
+            <button class="nav-item" data-panel="qrcodes" id="navQRCodes">
+                <span class="nav-icon">📲</span>
+                <span>QR Codes</span>
+            </button>
+        </nav>
+        <div class="sidebar-status" id="sidebarStatus">
+            <span class="status-dot" id="connectionDot"></span>
+            <span id="connectionText">Connecting...</span>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+
+        <!-- Top Bar -->
+        <div class="top-bar">
+            <div class="top-bar-left">
+                <h2 class="panel-heading" id="panelHeading">Verification Requests</h2>
+                <span class="panel-subtext" id="panelSubtext">Real-time customer check-ins</span>
+            </div>
+            <div class="top-bar-right">
+                <button class="action-btn secondary" id="clearExpiredBtn" title="Clear expired requests">
+                    <span>🗑</span> Clear Expired
+                </button>
+                <button class="action-btn primary hidden" id="printAllBtn" title="Print all QR codes">
+                    <span>🖨</span> Print All
+                </button>
+            </div>
+        </div>
+
+        <!-- PANEL: Verification Requests -->
+        <section class="panel active" id="panelRequests">
+            <!-- Audio tone on new request -->
+            <audio id="notifySound" preload="auto">
+                <source src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAA...">
+            </audio>
+
+            <div class="requests-grid" id="requestsGrid">
+                <!-- Empty state -->
+                <div class="empty-state" id="emptyRequests">
+                    <div class="empty-icon">🔔</div>
+                    <h3>No requests yet</h3>
+                    <p>When customers scan QR codes and enter their details, requests will appear here with their OTPs.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- PANEL: QR Codes -->
+        <section class="panel" id="panelQRCodes">
+            <div class="qr-controls">
+                <div class="url-config">
+                    <label for="baseUrlInput">Base URL for QR Codes</label>
+                    <div class="url-input-group">
+                        <input type="text" id="baseUrlInput" value="http://localhost:3000"
+                            placeholder="https://your-domain.com">
+                        <button class="action-btn primary small" id="updateUrlBtn">Update QR Codes</button>
+                    </div>
+                    <p class="url-hint">Change this to your deployment URL (e.g., your ngrok URL or production domain).
+                    </p>
+                </div>
+            </div>
+            <div class="qr-grid" id="qrGrid">
+                <!-- QR cards rendered by JS -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Toast notification -->
+    <div class="admin-toast" id="adminToast">
+        <span class="toast-emoji" id="toastEmoji">🔔</span>
+        <div class="toast-body">
+            <strong class="toast-title" id="toastTitle">New Request</strong>
+            <span class="toast-msg" id="toastMsg">Table 1 — Pruthvi</span>
+        </div>
+    </div>
+
+    <!-- Firebase config placeholder — filled by admin-script.js -->
+    <script>
+        // ============================================================
+        // PASTE YOUR FIREBASE WEB APP CONFIG HERE
+        // Firebase Console → Project Settings → Your apps → Web → SDK setup
+        // ============================================================
+        window.FIREBASE_CONFIG = {
+            apiKey: "AIzaSyA4CcxBrxhUD84ZOmkmsahzlW_kxGAjP08",
+            authDomain: "hotel-ca71b.firebaseapp.com",
+            databaseURL: "https://hotel-ca71b-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "hotel-ca71b",
+            storageBucket: "hotel-ca71b.firebasestorage.app",
+            messagingSenderId: "678730716574",
+            appId: "1:678730716574:web:0d0c8b5c1a20516bdbf28f",
+            measurementId: "G-7QD6N49TQ4"
+        };
+    </script>
+    <script src="admin-script.js"></script>
+</body>
+
+</html>
