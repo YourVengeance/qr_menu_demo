@@ -41,7 +41,17 @@ function generateToken() {
  * Customer submits name + phone + tableId
  * → Generates OTP, stores in Firebase, returns requestId
  */
-app.post('/api/verify/request', async (req, res) => {
+const rateLimit = require('express-rate-limit');
+
+const otpLimiter = rateLimit({
+    windowMs: 3 * 60 * 1000, // 3 minutes
+    max: 5, // Limit each IP to 5 requests per `window` (here, per 3 minutes)
+    message: { error: 'Too many OTP requests. Please try again in a few minutes.' },
+    standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+    legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+});
+
+app.post('/api/verify/request', otpLimiter, async (req, res) => {
     try {
         const { name, phone, tableId } = req.body;
 
