@@ -828,6 +828,248 @@ body {
 }
 
 /* ============================================
+   SLIDE TO ORDER
+   ============================================ */
+.cart-slider-wrapper {
+    margin-top: 16px;
+    background: var(--bg-warm);
+    border-radius: 100px;
+    height: 56px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    border: 1px solid var(--border);
+}
+
+.cart-slider-bg {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 0;
+    background: var(--gold);
+    transition: background 0.3s;
+}
+
+.cart-slider-bg.success {
+    background: var(--green);
+}
+
+.cart-slider-text {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--ink-faint);
+    pointer-events: none;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    z-index: 1;
+    transition: color 0.3s;
+}
+
+.cart-slider-text.success {
+    color: #fff;
+}
+
+.cart-slider-thumb {
+    width: 48px;
+    height: 48px;
+    background: #fff;
+    border-radius: 50%;
+    position: absolute;
+    left: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    cursor: grab;
+    z-index: 2;
+    transition: transform 0.1s;
+    color: var(--gold);
+}
+
+.cart-slider-thumb:active {
+    cursor: grabbing;
+}
+
+.cart-slider-thumb.success {
+    color: var(--green);
+}
+
+.order-success-overlay {
+    position: absolute;
+    inset: 0;
+    background: var(--bg-card);
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s var(--ease);
+}
+
+.order-success-overlay.visible {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.order-success-icon {
+    font-size: 4rem;
+    margin-bottom: 16px;
+    animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+}
+
+@keyframes popIn {
+    0% { transform: scale(0.5); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.order-success-title {
+    font-family: var(--font-serif);
+    font-size: 1.5rem;
+    color: var(--ink-font);
+    margin-bottom: 8px;
+}
+
+.order-success-text {
+    color: var(--ink-faint);
+    font-size: 0.9rem;
+    text-align: center;
+    max-width: 80%;
+}
+
+/* ============================================
+   MY BILL & RECEIPT STYLING
+   ============================================ */
+.bill-container {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow-card);
+    display: none;
+}
+
+.bill-container.visible {
+    display: block;
+    animation: fadeUp 0.4s var(--ease) both;
+}
+
+.bill-items {
+    margin-bottom: 20px;
+}
+
+.bill-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px dashed var(--border);
+}
+
+.bill-item-name {
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    color: var(--ink-font);
+    font-weight: 500;
+}
+
+.bill-item-qty {
+    font-weight: 700;
+    color: var(--ink-muted);
+    margin-right: 8px;
+    font-size: 0.85rem;
+}
+
+.bill-item-price {
+    font-family: var(--font-serif);
+    font-size: 1.05rem;
+    color: var(--ink-font);
+}
+
+.bill-summary {
+    background: var(--bg-warm);
+    padding: 20px;
+    border-radius: 12px;
+}
+
+.bill-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+    color: var(--ink-faint);
+}
+
+.tax-row {
+    font-size: 0.85rem;
+    color: var(--ink-muted);
+}
+
+.bill-divider {
+    height: 1px;
+    background: var(--border);
+    margin: 12px 0;
+}
+
+.grand-total {
+    font-size: 1.25rem;
+    font-family: var(--font-serif);
+    color: var(--ink-font);
+    font-weight: 700;
+    margin-bottom: 0;
+}
+
+.bill-empty {
+    display: none;
+    text-align: center;
+    padding: 60px 20px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
+
+.bill-empty.visible {
+    display: block;
+}
+
+.bill-empty span {
+    font-size: 2.5rem;
+    display: block;
+    margin-bottom: 16px;
+}
+
+.bill-empty p {
+    font-size: 0.95rem;
+    color: var(--ink-faint);
+    margin-bottom: 20px;
+}
+
+.btn-primary {
+    background: var(--gold);
+    color: #fff;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: background 0.2s;
+}
+
+.btn-primary:hover {
+    background: #A07608;
+}
+
+/* ============================================
    FOOTER — Clean
    ============================================ */
 .menu-footer {

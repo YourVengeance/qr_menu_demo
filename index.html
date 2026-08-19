@@ -52,6 +52,10 @@
     <!-- Category Tabs -->
     <nav class="category-nav" id="categoryNav">
         <div class="category-tabs">
+            <button class="cat-tab" data-category="mybill" id="tabMyBill">
+                <span class="cat-emoji">🧾</span>
+                <span>My Bill</span>
+            </button>
             <button class="cat-tab active" data-category="all" id="tabAll">
                 <span class="cat-emoji">🍽️</span>
                 <span>All</span>
@@ -85,6 +89,45 @@
 
     <!-- Menu Content -->
     <main class="menu-content" id="menuContent">
+
+        <!-- My Bill Section -->
+        <section class="menu-section hidden" data-section="mybill" id="sectionMyBill">
+            <div class="section-label">
+                <h2>🧾 My Bill</h2>
+            </div>
+            
+            <div class="bill-container" id="billContainer">
+                <div class="bill-items" id="billItemsList">
+                    <!-- Loaded dynamically via JS -->
+                </div>
+                
+                <div class="bill-summary">
+                    <div class="bill-row">
+                        <span>Food Total</span>
+                        <span id="billFoodTotal">₹0</span>
+                    </div>
+                    <div class="bill-row tax-row">
+                        <span>CGST (2.5%)</span>
+                        <span id="billCgst">₹0</span>
+                    </div>
+                    <div class="bill-row tax-row">
+                        <span>SGST (2.5%)</span>
+                        <span id="billSgst">₹0</span>
+                    </div>
+                    <div class="bill-divider"></div>
+                    <div class="bill-row grand-total">
+                        <span>Grand Total</span>
+                        <span id="billGrandTotal">₹0</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bill-empty visible" id="billEmpty">
+                <span>🍽️</span>
+                <p>You haven't ordered anything yet.</p>
+                <button class="btn-primary" onclick="document.getElementById('tabAll').click()">View Menu</button>
+            </div>
+        </section>
 
         <!-- Starters -->
         <section class="menu-section" data-section="starters" id="sectionStarters">
@@ -535,7 +578,19 @@
                 <span>Total</span>
                 <span class="cart-total-price" id="cartTotalPrice">₹0</span>
             </div>
+            
+            <div class="cart-slider-wrapper" id="cartSliderWrapper">
+                <div class="cart-slider-bg" id="cartSliderBg"></div>
+                <div class="cart-slider-text" id="cartSliderText">Slide to Order >>></div>
+                <div class="cart-slider-thumb" id="cartSliderThumb">🛒</div>
+            </div>
         </div>
+    </div>
+    
+    <div class="order-success-overlay" id="orderSuccessOverlay">
+        <div class="order-success-icon">✨</div>
+        <h3 class="order-success-title">Order Placed!</h3>
+        <p class="order-success-text">The kitchen has received your order and is preparing it now.</p>
     </div>
 
     <!-- Floating Cart Bar -->

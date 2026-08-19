@@ -193,6 +193,126 @@ app.get('/api/verify/session', async (req, res) => {
 });
 
 /**
+ * POST /api/orders/place
+ * Places an order from the cart
+ */
+app.post('/api/orders/place', async (req, res) => {
+    try {
+        const { sessionToken, items, totalPrice } = req.body;
+        
+        if (!sessionToken || !items || items.length === 0) {
+            return res.status(400).json({ error: 'Invalid order data.' });
+        }
+
+        // Validate session
+        const snapshot = await db.ref('verifications')
+            .orderByChild('sessionToken')
+            .equalTo(sessionToken)
+            .limitToFirst(1)
+            .once('value');
+
+        const data = snapshot.val();
+        if (!data) {
+            return res.status(401).json({ error: 'Unauthorized or expired session.' });
+        }
+
+        const session = Object.values(data)[0];
+        if (session.status !== 'verified') {
+            return res.status(401).json({ error: 'Unauthorized session.' });
+        }
+
+        // Save order
+        const orderRef = db.ref('orders').push();
+        await orderRef.set({
+            tableId: session.tableId,
+            tableName: session.tableName,
+            customerName: session.customerName,
+            items,
+            totalPrice,
+            status: 'pending', // pending -> preparing -> completed
+            createdAt: Date.now()
+        });
+
+        console.log(`[ORDER PLACED] ${session.tableName} | ${session.customerName} | ₹${totalPrice}`);
+
+        res.json({ success: true, orderId: orderRef.key });
+    } catch (error) {
+        console.error('Error placing order:', error);
+        res.status(500).json({ error: 'Server error. Please try again.' });
+    }
+});
+
+/**
+ * GET /api/orders/my-bill
+ * Fetches all active orders for the current session
+ */
+app.get('/api/orders/my-bill', async (req, res) => {
+    try {
+        const { sessionToken } = req.query;
+        if (!sessionToken) {
+            return res.status(400).json({ error: 'Missing session token.' });
+        }
+
+        // Validate session
+        const sessionSnap = await db.ref('verifications')
+            .orderByChild('sessionToken')
+            .equalTo(sessionToken)
+            .limitToFirst(1)
+            .once('value');
+
+        const sessionData = sessionSnap.val();
+        if (!sessionData) {
+            return res.status(401).json({ error: 'Unauthorized.' });
+        }
+        
+        const session = Object.values(sessionData)[0];
+
+        // Get all orders for this table
+        const ordersSnap = await db.ref('orders')
+            .orderByChild('tableId')
+            .equalTo(session.tableId)
+            .once('value');
+            
+        const ordersData = ordersSnap.val() || {};
+        
+        // Filter orders that belong to this exact customer and aren't paid/cleared
+        let allItems = [];
+        let totalFoodPrice = 0;
+        
+        Object.values(ordersData).forEach(order => {
+            if (order.customerName === session.customerName && order.status !== 'paid') {
+                if (order.items && Array.isArray(order.items)) {
+                    allItems = allItems.concat(order.items);
+                    totalFoodPrice += order.totalPrice;
+                }
+            }
+        });
+
+        // Consolidate identical items
+        const consolidated = {};
+        allItems.forEach(item => {
+            if (!consolidated[item.name]) {
+                consolidated[item.name] = { ...item };
+            } else {
+                consolidated[item.name].qty += item.qty;
+            }
+        });
+        
+        const finalItems = Object.values(consolidated);
+
+        res.json({
+            success: true,
+            items: finalItems,
+            totalFoodPrice
+        });
+        
+    } catch (error) {
+        console.error('Error fetching bill:', error);
+        res.status(500).json({ error: 'Server error.' });
+    }
+});
+
+/**
  * GET /api/tables
  * Returns all configured tables
  */

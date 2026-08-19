@@ -31,6 +31,7 @@ function initFirebase() {
                 });
 
                 initRequestsListener();
+                initBillsListener();
                 loadTables();
             } else {
                 // Not logged in
@@ -136,7 +137,8 @@ document.querySelectorAll('.nav-item').forEach(btn => {
         // Update top-bar
         const headings = {
             requests: ['Verification Requests', 'Real-time customer check-ins'],
-            qrcodes: ['Table QR Codes', 'Scan to access the digital menu']
+            qrcodes: ['Table QR Codes', 'Scan to access the digital menu'],
+            bills: ['Live Bills', 'Manage and print customer bills']
         };
         document.getElementById('panelHeading').textContent = headings[panel][0];
         document.getElementById('panelSubtext').textContent = headings[panel][1];
@@ -524,6 +526,204 @@ setInterval(() => {
         }
     });
 }, 10000);
+
+/* ============================================
+   BILLS MANAGEMENT
+   ============================================ */
+let activeBills = {}; // tableName -> { orders: [], foodTotal: 0 }
+
+function initBillsListener() {
+    if (!db) return;
+    db.ref('orders').on('value', (snapshot) => {
+        const data = snapshot.val() || {};
+        activeBills = {};
+        
+        Object.entries(data).forEach(([id, order]) => {
+            if (order.status === 'cleared') return;
+            
+            const table = order.tableName || 'Unknown Table';
+            if (!activeBills[table]) {
+                activeBills[table] = {
+                    orders: [],
+                    foodTotal: 0,
+                    status: 'pending',
+                    sessionToken: order.sessionToken
+                };
+            }
+            activeBills[table].orders.push({id, ...order});
+            
+            order.items.forEach(item => {
+                activeBills[table].foodTotal += (item.price * item.qty);
+            });
+        });
+        
+        renderBills();
+    });
+}
+
+function renderBills() {
+    const grid = document.getElementById('billsGrid');
+    const emptyState = document.getElementById('emptyBills');
+    
+    if (Object.keys(activeBills).length === 0) {
+        emptyState.style.display = 'flex';
+        emptyState.style.flexDirection = 'column';
+        emptyState.style.alignItems = 'center';
+        grid.innerHTML = '';
+        grid.appendChild(emptyState);
+        return;
+    }
+    
+    emptyState.style.display = 'none';
+    grid.innerHTML = '';
+    
+    Object.entries(activeBills).forEach(([tableName, billData]) => {
+        const cgst = Math.round(billData.foodTotal * 0.025);
+        const sgst = Math.round(billData.foodTotal * 0.025);
+        const grandTotal = billData.foodTotal + cgst + sgst;
+        
+        // Consolidate items
+        const consolidated = {};
+        billData.orders.forEach(o => {
+            o.items.forEach(item => {
+                if (!consolidated[item.name]) consolidated[item.name] = { qty: 0, price: item.price };
+                consolidated[item.name].qty += item.qty;
+            });
+        });
+        
+        let itemsHtml = '<div class="bill-items-list" style="margin-bottom:16px; font-size:0.9rem;">';
+        Object.entries(consolidated).forEach(([name, data]) => {
+            itemsHtml += `
+                <div style="display:flex; justify-content:space-between; margin-bottom:4px; color:var(--ink-faint);">
+                    <span><strong style="color:var(--ink);">${data.qty}x</strong> ${name}</span>
+                    <span>₹${data.qty * data.price}</span>
+                </div>
+            `;
+        });
+        itemsHtml += '</div>';
+        
+        const card = document.createElement('div');
+        card.className = 'bill-card';
+        card.innerHTML = `
+            <div class="bill-card-header">
+                <div class="bill-table-name">${tableName}</div>
+                <div class="bill-total-amount">₹${grandTotal}</div>
+            </div>
+            ${itemsHtml}
+            <div class="bill-status-badge ${billData.generated ? 'generated' : ''}">
+                ${billData.generated ? '✅ Bill Generated' : '⏳ Pending'}
+            </div>
+            
+            <div class="bill-actions">
+                <button class="action-btn secondary" onclick="printBill('${tableName}')" style="margin-bottom: 10px;">🖨 Print Bill</button>
+                <button class="action-btn clear-table-btn" onclick="clearTable('${tableName}')">🗑 Clear Table</button>
+            </div>
+        `;
+        grid.appendChild(card);
+    });
+}
+
+window.printBill = function(tableName) {
+    const billData = activeBills[tableName];
+    if (!billData) return;
+    
+    let itemsHtml = '<ul style="list-style:none; padding:0; margin:0 0 10px 0;">';
+    billData.orders.forEach(o => {
+        o.items.forEach(item => {
+            itemsHtml += `
+                <li style="display:flex; justify-content:space-between; margin-bottom:5px;">
+                    <span>${item.qty}x ${item.name}</span>
+                    <span>₹${item.price * item.qty}</span>
+                </li>
+            `;
+        });
+    });
+    itemsHtml += '</ul>';
+    
+    const cgst = Math.round(billData.foodTotal * 0.025);
+    const sgst = Math.round(billData.foodTotal * 0.025);
+    const grandTotal = billData.foodTotal + cgst + sgst;
+    
+    const printWindow = window.open('', '', 'width=400,height=600');
+    printWindow.document.write(`
+        <html>
+            <head>
+                <title>Bill - ${tableName}</title>
+                <style>
+                    body { font-family: monospace; padding: 20px; color: #000; font-size: 14px; max-width: 350px; margin: 0 auto; }
+                    .header { text-align: center; border-bottom: 2px dashed #000; padding-bottom: 10px; margin-bottom: 10px; }
+                    .header h2 { margin: 0 0 5px 0; }
+                    .row { display: flex; justify-content: space-between; margin-bottom: 5px; }
+                    .divider { border-bottom: 1px dashed #000; margin: 10px 0; }
+                    .bold { font-weight: bold; }
+                </style>
+            </head>
+            <body>
+                <div class="header">
+                    <h2>Garden Bistro</h2>
+                    <div>${tableName}</div>
+                </div>
+                ${itemsHtml}
+                <div class="divider"></div>
+                <div class="row">
+                    <span>Food Total:</span>
+                    <span>₹${billData.foodTotal}</span>
+                </div>
+                <div class="row">
+                    <span>CGST (2.5%):</span>
+                    <span>₹${cgst}</span>
+                </div>
+                <div class="row">
+                    <span>SGST (2.5%):</span>
+                    <span>₹${sgst}</span>
+                </div>
+                <div class="divider"></div>
+                <div class="row bold" style="font-size: 16px;">
+                    <span>GRAND TOTAL:</span>
+                    <span>₹${grandTotal}</span>
+                </div>
+                <div class="divider"></div>
+                <div style="text-align:center; margin-top:20px;">Thank you for dining with us!</div>
+            </body>
+        </html>
+    `);
+    printWindow.document.close();
+    printWindow.focus();
+    setTimeout(() => {
+        printWindow.print();
+        printWindow.close();
+    }, 250);
+};
+
+window.clearTable = async function(tableName) {
+    if (!confirm(`Are you sure you want to clear ${tableName}? This will delete their orders and session.`)) return;
+    const billData = activeBills[tableName];
+    if (!billData) return;
+    
+    try {
+        const updates = {};
+        
+        // 1. Delete orders
+        billData.orders.forEach(o => {
+            updates[`orders/${o.id}`] = null;
+        });
+        
+        // 2. Delete verifications matching sessionToken or tableName
+        const verifSnap = await db.ref('verifications').once('value');
+        const verifs = verifSnap.val() || {};
+        Object.entries(verifs).forEach(([vId, v]) => {
+            if (v.tableName === tableName || v.sessionToken === billData.sessionToken) {
+                updates[`verifications/${vId}`] = null;
+            }
+        });
+        
+        await db.ref().update(updates);
+        showAdminToast('🗑 Cleared', `${tableName} is now ready for the next customer.`);
+    } catch (error) {
+        console.error('Error clearing table:', error);
+        alert('Failed to clear table.');
+    }
+};
 
 /* ============================================
    INIT

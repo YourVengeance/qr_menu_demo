@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     initQuantityControls();
     initCart();
     initAnimations();
+    fetchMyBill();
 });
 
 /* ============================================
@@ -97,8 +98,12 @@ function initCategoryFilter() {
 
             if (category === 'all') {
                 sections.forEach(s => {
-                    s.classList.remove('hidden');
-                    animateItems(s);
+                    if (s.dataset.section === 'mybill') {
+                        s.classList.add('hidden');
+                    } else {
+                        s.classList.remove('hidden');
+                        animateItems(s);
+                    }
                 });
             } else {
                 sections.forEach(s => {
@@ -328,4 +333,218 @@ function animateItems(section) {
         item.offsetHeight;
         item.style.animation = `fadeUp 0.4s var(--ease) ${i * 0.06}s both`;
     });
+}
+
+/* ============================================
+   SLIDE TO ORDER LOGIC
+   ============================================ */
+document.addEventListener('DOMContentLoaded', () => {
+    const thumb = document.getElementById('cartSliderThumb');
+    const wrapper = document.getElementById('cartSliderWrapper');
+    const bg = document.getElementById('cartSliderBg');
+    const text = document.getElementById('cartSliderText');
+    const successOverlay = document.getElementById('orderSuccessOverlay');
+    
+    if (!thumb || !wrapper) return;
+
+    let isDragging = false;
+    let startX = 0;
+    let currentX = 0;
+    let maxDrag = 0;
+    let isProcessing = false;
+
+    function onDragStart(e) {
+        if (isProcessing) return;
+        isDragging = true;
+        startX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
+        maxDrag = wrapper.offsetWidth - thumb.offsetWidth - 8; // 4px padding on each side
+        thumb.style.transition = 'none';
+        bg.style.transition = 'none';
+    }
+
+    function onDragMove(e) {
+        if (!isDragging || isProcessing) return;
+        const x = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
+        currentX = Math.max(0, Math.min(x - startX, maxDrag));
+        
+        thumb.style.transform = `translateX(${currentX}px)`;
+        bg.style.width = `${currentX + (thumb.offsetWidth / 2)}px`;
+
+        if (currentX > maxDrag * 0.8) {
+            text.style.color = '#fff';
+        } else {
+            text.style.color = '';
+        }
+
+        // Trigger order if reached the end
+        if (currentX >= maxDrag - 2) {
+            isDragging = false;
+            placeOrder();
+        }
+    }
+
+    function onDragEnd() {
+        if (!isDragging || isProcessing) return;
+        isDragging = false;
+        
+        // Snap back
+        thumb.style.transition = 'transform 0.3s var(--ease)';
+        bg.style.transition = 'width 0.3s var(--ease)';
+        thumb.style.transform = 'translateX(0)';
+        bg.style.width = '0';
+        text.style.color = '';
+    }
+
+    thumb.addEventListener('mousedown', onDragStart);
+    thumb.addEventListener('touchstart', onDragStart, { passive: true });
+
+    document.addEventListener('mousemove', onDragMove);
+    document.addEventListener('touchmove', onDragMove, { passive: false });
+
+    document.addEventListener('mouseup', onDragEnd);
+    document.addEventListener('touchend', onDragEnd);
+
+    async function placeOrder() {
+        isProcessing = true;
+        text.textContent = 'PLACING ORDER...';
+        
+        // Collect cart items
+        const items = [];
+        let totalPrice = 0;
+        
+        document.querySelectorAll('.menu-item').forEach(item => {
+            const qty = parseInt(item.querySelector('.qty-value').textContent);
+            if (qty > 0) {
+                const name = item.dataset.name;
+                const price = parseInt(item.dataset.price);
+                items.push({ name, price, qty });
+                totalPrice += (price * qty);
+            }
+        });
+
+        // Get session
+        const raw = sessionStorage.getItem('qrMenuSession');
+        if (!raw || items.length === 0) {
+            resetSlider();
+            return;
+        }
+        
+        const session = JSON.parse(raw);
+
+        try {
+            const res = await fetch('/api/orders/place', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    sessionToken: session.token,
+                    items,
+                    totalPrice
+                })
+            });
+
+            const data = await res.json();
+            
+            if (res.ok) {
+                // Success UI
+                bg.classList.add('success');
+                thumb.classList.add('success');
+                text.textContent = 'ORDER PLACED!';
+                
+                setTimeout(() => {
+                    successOverlay.classList.add('visible');
+                    // Reset cart
+                    document.querySelectorAll('.menu-item').forEach(item => {
+                        item.querySelector('.qty-value').textContent = '0';
+                        updateItemState(item, 0);
+                    });
+                    updateCart();
+                }, 800);
+
+                setTimeout(() => {
+                    successOverlay.classList.remove('visible');
+                    closeCart();
+                    resetSlider();
+                    fetchMyBill(); // Refresh bill after successful order
+                }, 3500);
+            } else {
+                alert(data.error || 'Failed to place order.');
+                resetSlider();
+            }
+        } catch (error) {
+            console.error('Order error:', error);
+            alert('Network error. Please try again.');
+            resetSlider();
+        }
+    }
+
+    function resetSlider() {
+        isProcessing = false;
+        bg.classList.remove('success');
+        thumb.classList.remove('success');
+        text.textContent = 'Slide to Order >>>';
+        thumb.style.transition = 'transform 0.3s var(--ease)';
+        bg.style.transition = 'width 0.3s var(--ease)';
+        thumb.style.transform = 'translateX(0)';
+        bg.style.width = '0';
+        text.style.color = '';
+    }
+});
+
+/* ============================================
+   LIVE BILL LOGIC
+   ============================================ */
+async function fetchMyBill() {
+    const raw = sessionStorage.getItem('qrMenuSession');
+    if (!raw) return;
+    const session = JSON.parse(raw);
+    
+    try {
+        const res = await fetch(`/api/orders/my-bill?sessionToken=${encodeURIComponent(session.token)}`);
+        const data = await res.json();
+        
+        if (res.ok) {
+            renderBill(data.items, data.totalFoodPrice);
+        }
+    } catch (error) {
+        console.error('Failed to fetch bill:', error);
+    }
+}
+
+function renderBill(items, foodTotal) {
+    const container = document.getElementById('billContainer');
+    const empty = document.getElementById('billEmpty');
+    const list = document.getElementById('billItemsList');
+    
+    if (!items || items.length === 0) {
+        container.classList.remove('visible');
+        empty.classList.add('visible');
+        return;
+    }
+    
+    empty.classList.remove('visible');
+    container.classList.add('visible');
+    
+    // Render Items
+    list.innerHTML = '';
+    items.forEach(item => {
+        const row = document.createElement('div');
+        row.className = 'bill-item';
+        row.innerHTML = `
+            <div class="bill-item-name">
+                <span class="bill-item-qty">${item.qty}x</span> ${item.name}
+            </div>
+            <div class="bill-item-price">₹${item.price * item.qty}</div>
+        `;
+        list.appendChild(row);
+    });
+    
+    // Calculate Taxes
+    const cgst = Math.round(foodTotal * 0.025);
+    const sgst = Math.round(foodTotal * 0.025);
+    const grandTotal = foodTotal + cgst + sgst;
+    
+    document.getElementById('billFoodTotal').textContent = `₹${foodTotal}`;
+    document.getElementById('billCgst').textContent = `₹${cgst}`;
+    document.getElementById('billSgst').textContent = `₹${sgst}`;
+    document.getElementById('billGrandTotal').textContent = `₹${grandTotal}`;
 }

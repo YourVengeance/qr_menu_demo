@@ -39,6 +39,10 @@
                 <span class="nav-icon">📲</span>
                 <span>QR Codes</span>
             </button>
+            <button class="nav-item" data-panel="bills" id="navBills">
+                <span class="nav-icon">🧾</span>
+                <span>Bills</span>
+            </button>
             
             <div style="flex:1;"></div>
             
@@ -109,6 +113,18 @@
             </div>
             <div class="qr-grid" id="qrGrid">
                 <!-- QR cards rendered by JS -->
+            </div>
+        </section>
+
+        <!-- PANEL: Bills -->
+        <section class="panel" id="panelBills">
+            <div class="bills-grid" id="billsGrid">
+                <!-- Bills rendered by JS -->
+                <div class="empty-state" id="emptyBills">
+                    <div class="empty-icon">🧾</div>
+                    <h3>No Active Bills</h3>
+                    <p>When tables place orders, their live bills will appear here.</p>
+                </div>
             </div>
         </section>
 

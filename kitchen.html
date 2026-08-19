@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kitchen Display System — The Garden Bistro</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Firebase client SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+    
+    <link rel="stylesheet" href="kitchen-style.css">
+</head>
+<body>
+    <header class="kds-header">
+        <div class="kds-title">
+            <span style="font-size: 1.8rem;">🍳</span>
+            <span>Kitchen Display System (KDS)</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 20px;">
+            <div class="kds-clock" id="kdsClock">00:00:00</div>
+            <button id="logoutBtn" style="background: transparent; color: var(--red); border: 1px solid var(--red); padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600;">Logout</button>
+        </div>
+    </header>
+
+    <main class="kds-board">
+        <!-- New Orders Column -->
+        <section class="kds-column">
+            <div class="kds-column-header">
+                <span>🔥 NEW ORDERS</span>
+                <span id="newCount">0</span>
+            </div>
+            <div class="kds-column-content" id="colNew">
+                <!-- Tickets injected here -->
+            </div>
+        </section>
+
+        <!-- Preparing Column -->
+        <section class="kds-column">
+            <div class="kds-column-header">
+                <span style="color: var(--accent);">👨‍🍳 PREPARING</span>
+                <span id="prepCount">0</span>
+            </div>
+            <div class="kds-column-content" id="colPrep">
+                <!-- Tickets injected here -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Audio for new orders -->
+    <audio id="orderDing" preload="auto">
+        <source src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YVgGAACAeHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4">
+    </audio>
+
+    <!-- Login Overlay -->
+    <div class="login-overlay" id="loginOverlay">
+        <div class="login-card" style="text-align: center;">
+            <img src="images/empire.png" alt="Logo" class="login-logo" width="64" height="64" style="margin-bottom:16px;">
+            <h2 style="margin-bottom: 8px;">KDS Login</h2>
+            <p style="color: var(--ink-faint); margin-bottom: 24px;">Enter your kitchen credentials to access the board</p>
+            <form id="loginForm" autocomplete="off">
+                <input type="email" id="kdsEmail" placeholder="kitchen@gardenbistro.com" required style="width: 100%; padding: 12px; margin-bottom: 16px; background: var(--bg); border: 1px solid var(--border); color: var(--ink); border-radius: 6px;">
+                <input type="password" id="kdsPassword" placeholder="••••••••" required style="width: 100%; padding: 12px; margin-bottom: 16px; background: var(--bg); border: 1px solid var(--border); color: var(--ink); border-radius: 6px;">
+                
+                <div id="loginError" style="color: var(--red); margin-bottom: 16px; display: none;"></div>
+                
+                <button type="submit" style="width: 100%; padding: 14px; background: var(--accent); color: #000; border: none; border-radius: 6px; font-weight: 600; cursor: pointer;">Access Kitchen Board</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Firebase config placeholder -->
+    <script>
+        window.FIREBASE_CONFIG = {
+            apiKey: "AIzaSyA4CcxBrxhUD84ZOmkmsahzlW_kxGAjP08",
+            authDomain: "hotel-ca71b.firebaseapp.com",
+            databaseURL: "https://hotel-ca71b-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "hotel-ca71b",
+            storageBucket: "hotel-ca71b.firebasestorage.app",
+            messagingSenderId: "678730716574",
+            appId: "1:678730716574:web:0d0c8b5c1a20516bdbf28f",
+            measurementId: "G-7QD6N49TQ4"
+        };
+    </script>
+    <script src="kitchen-script.js"></script>
+</body>
+</html>
