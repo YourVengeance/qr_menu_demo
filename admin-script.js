@@ -322,6 +322,10 @@ function renderQRCodes() {
             return;
         }
 
+        if (baseUrlInput.value === 'http://localhost:3000' && window.location.origin) {
+            baseUrlInput.value = window.location.origin;
+        }
+
         const baseUrl = baseUrlInput.value.trim().replace(/\/$/, '');
         grid.innerHTML = '';
 

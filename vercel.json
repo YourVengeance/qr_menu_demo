@@ -18,6 +18,14 @@
             "use": "@vercel/static"
         },
         {
+            "src": "kitchen.html",
+            "use": "@vercel/static"
+        },
+        {
+            "src": "firebase-config.js",
+            "use": "@vercel/static"
+        },
+        {
             "src": "menu-*.+(js|css)",
             "use": "@vercel/static"
         },
@@ -27,6 +35,10 @@
         },
         {
             "src": "verify-*.+(js|css)",
+            "use": "@vercel/static"
+        },
+        {
+            "src": "kitchen-*.+(js|css)",
             "use": "@vercel/static"
         },
         {
@@ -42,6 +54,10 @@
         {
             "src": "/admin",
             "dest": "/admin.html"
+        },
+        {
+            "src": "/kitchen",
+            "dest": "/kitchen.html"
         },
         {
             "src": "/(.*)",
