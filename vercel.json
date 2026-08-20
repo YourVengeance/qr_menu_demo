@@ -18,6 +18,10 @@
             "use": "@vercel/static"
         },
         {
+            "src": "demo.html",
+            "use": "@vercel/static"
+        },
+        {
             "src": "kitchen.html",
             "use": "@vercel/static"
         },
